@@ -1,4 +1,5 @@
 # Security Operations Multi-Tool Platform (MCP)
+[![Trust Score](https://archestra.ai/mcp-catalog/api/badge/quality/securityfortech/secops-mcp)](https://archestra.ai/mcp-catalog/securityfortech__secops-mcp)
 
 A comprehensive security operations platform that integrates multiple security tools into a unified interface. This platform provides a centralized way to run various security scanning and testing tools.
 
