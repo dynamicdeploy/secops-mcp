@@ -1,0 +1,1 @@
+docker tag secops-mcp hackerdogs/secops-mcp:latest && docker push hackerdogs/secops-mcp:latest
