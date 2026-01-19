@@ -196,8 +196,13 @@ def arjun_with_custom_payloads(
     Returns:
         Dict[str, Any]: Results with custom parameter testing
     """
-    # Get base results
-    results = arjun_wrapper(url, method, wordlist, **kwargs)
+    # Get base results - pass all parameters as keyword arguments
+    results = arjun_wrapper(
+        url=url,
+        method=method,
+        wordlist=wordlist,
+        **kwargs
+    )
     
     if not results["success"]:
         return results

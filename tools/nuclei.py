@@ -41,20 +41,22 @@ def run_nuclei(
             check=True
         )
         
-        # Parse the output
-        try:
-            data = json.loads(result.stdout)
-            return json.dumps({
-                "success": True,
-                "target": target,
-                "results": data
-            })
-        except json.JSONDecodeError:
-            return json.dumps({
-                "success": False,
-                "error": "Failed to parse JSON output",
-                "raw_output": result.stdout
-            })
+        # Parse the output - nuclei outputs one JSON object per line
+        findings = []
+        for line in result.stdout.strip().split('\n'):
+            if line.strip():
+                try:
+                    data = json.loads(line)
+                    findings.append(data)
+                except json.JSONDecodeError:
+                    continue
+        
+        return json.dumps({
+            "success": True,
+            "target": target,
+            "findings": findings,
+            "count": len(findings)
+        }, indent=2)
         
     except subprocess.CalledProcessError as e:
         return json.dumps({

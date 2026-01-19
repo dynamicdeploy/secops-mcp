@@ -6,14 +6,14 @@ from typing import List, Optional, Dict, Any
 def run_nmap(
     target: str,
     ports: Optional[str] = None,
-    options: Optional[List[str]] = None,
+    scan_type: Optional[str] = "sV",
 ) -> str:
     """Run an Nmap network scan on the specified target.
     
     Args:
         target: The target IP or hostname to scan
         ports: Specific ports to scan (e.g., "22,80,443")
-        options: Additional Nmap options (e.g., ["-sV", "-A"])
+        scan_type: Scan type options (e.g., "sV" for version detection, "sS" for SYN scan)
     
     Returns:
         str: JSON string containing scan results
@@ -23,8 +23,9 @@ def run_nmap(
         cmd = ["nmap", "-oX", "-", target]  # Output in XML format to stdout
         if ports:
             cmd.extend(["-p", ports])
-        if options:
-            cmd.extend(options)
+        if scan_type:
+            # Add scan type as a single flag (e.g., "sV" becomes "-sV")
+            cmd.append(f"-{scan_type}")
         
         # Run the command
         result = subprocess.run(
@@ -39,9 +40,9 @@ def run_nmap(
             "success": True,
             "target": target,
             "ports": ports,
+            "scan_type": scan_type,
             "results": {
-                "xml_output": result.stdout,
-                "options": options or []
+                "xml_output": result.stdout
             }
         })
         

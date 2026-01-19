@@ -5,22 +5,22 @@ from typing import List, Optional, Dict, Any
 
 def run_xsstrike(
     url: str,
-    options: Optional[List[str]] = None,
+    crawl: bool = False,
 ) -> str:
     """Run XSStrike to detect XSS vulnerabilities.
     
     Args:
         url: Target URL to scan
-        options: Additional XSStrike options (e.g., ["--crawl", "--blind"])
+        crawl: Whether to crawl the website for more URLs
     
     Returns:
         str: JSON string containing scan results
     """
     try:
         # Build the command
-        cmd = ["python3", "/opt/XSStrike/xsstrike.py", "-u", url]
-        if options:
-            cmd.extend(options)
+        cmd = ["xsstrike", "-u", url]
+        if crawl:
+            cmd.append("--crawl")
         
         # Run the command
         result = subprocess.run(
@@ -34,9 +34,9 @@ def run_xsstrike(
         return json.dumps({
             "success": True,
             "url": url,
+            "crawl": crawl,
             "results": {
-                "output": result.stdout,
-                "options": options or []
+                "output": result.stdout
             }
         })
         

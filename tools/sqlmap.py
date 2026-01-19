@@ -5,13 +5,15 @@ from typing import List, Optional, Dict, Any
 
 def run_sqlmap(
     url: str,
-    options: Optional[List[str]] = None,
+    risk: Optional[int] = 1,
+    level: Optional[int] = 1,
 ) -> str:
     """Run sqlmap to test for SQL injection vulnerabilities.
     
     Args:
         url: Target URL to scan
-        options: Additional sqlmap options (e.g., ["--dbs", "--batch"])
+        risk: Risk level (1-3, default: 1)
+        level: Test level (1-5, default: 1)
     
     Returns:
         str: JSON string containing scan results
@@ -19,8 +21,10 @@ def run_sqlmap(
     try:
         # Build the command
         cmd = ["sqlmap", "-u", url, "--batch", "--output-dir=/tmp/sqlmap"]
-        if options:
-            cmd.extend(options)
+        if risk:
+            cmd.extend(["--risk", str(risk)])
+        if level:
+            cmd.extend(["--level", str(level)])
         
         # Run the command
         result = subprocess.run(
@@ -34,9 +38,10 @@ def run_sqlmap(
         return json.dumps({
             "success": True,
             "url": url,
+            "risk": risk,
+            "level": level,
             "results": {
-                "output": result.stdout,
-                "options": options or []
+                "output": result.stdout
             }
         })
         

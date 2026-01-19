@@ -13,8 +13,6 @@ def run_ipinfo(ip: Optional[str] = None) -> str:
     Returns:
         str: IP information in JSON format
     """
-    print(f"[debug] run_ipinfo(ip={ip})")
-    
     try:
         if ip:
             url = f"https://ipinfo.io/{ip}/json"
